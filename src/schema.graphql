@@ -1,0 +1,41 @@
+# type Query {
+#   info: String!
+#   feed: [Link!]!
+#   find(_id: ID!): Link
+# }
+
+# type Mutation {
+#     post(url: String!, description: String!): Link!
+#     updateLink(_id: ID!, url: String, description: String): Link
+#     deleteLink(_id: ID!): Link
+# }
+  
+# type Link {
+#   _id: ID!
+#   description: String!
+#   url: String!
+# }
+
+type Query{
+    finduser(_id: ID!): User
+}
+
+type Mutation{
+    adduser(email: String!): User
+    addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID!): User
+}
+
+type User{
+    _id: ID!
+    email: String!
+    History: [History!]
+}
+
+type History{
+    _id: ID!
+    title: String!
+    price: String!
+    sale: String!
+    url: String!
+    img: String!
+}
