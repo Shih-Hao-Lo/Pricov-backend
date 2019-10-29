@@ -26,13 +26,25 @@ const resolvers = {
     Mutation: {
         adduser: async (parents, args, context, info) => {
             let out = await context.dbf.adduser(args.email)
-            console.log('out in src');
+            console.log('out in adduser');
             console.log(out);
             return out
         },
         addhistory: async (parents, args, context, info) => {
             let out = await context.dbf.addHistory(args.title , args.price , args.sale , args.url , args.img , args.user)
-            console.log('out in src');
+            console.log('out in addhistory');
+            console.log(out);
+            return out;
+        },
+        updateuser: async (parents, args, context, info) => {
+            let out = await context.dbf.updateuser(args._id , args.email);
+            console.log('out in updateuser');
+            console.log(out);
+            return out;
+        },
+        deleteuser: async (parents, args, context, info) => {
+            let out = await context.dbf.deluser(args._id);
+            console.log('out in deluser');
             console.log(out);
             return out;
         }
@@ -55,6 +67,7 @@ const resolvers = {
         sale: (parents) => parents.sale,
         url: (parents) => parents.url,
         img: (parents) => parents.img,
+        user: (parents) => parents.user,
     }
 }
 

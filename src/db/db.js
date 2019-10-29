@@ -36,13 +36,63 @@ async function adduser(email) {
     return await getuser(InsertInfo.insertedId);
 }
 
+async function updateuser(id , email){
+    if(id === undefined){
+        throw 'input is empty';
+    }
+    if(id.constructor != ObjectID){
+        if(ObjectID.isValid(id)){
+            id = new ObjectID(id);
+        }
+        else{
+            throw 'Id is invalid!(in history.get)'
+        }
+    }
+    let updateduser = {
+        $set: {
+            email: email
+        }
+    }
+
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne({ _id: id } , updateduser);
+    if (updateInfo.modifiedCount === 0) throw 'Insert fail!';
+
+    return await getuser(id);
+}
+
+async function deluser(id){
+    if(id === undefined){
+        throw 'input is empty';
+    }
+    if(id.constructor != ObjectID){
+        if(ObjectID.isValid(id)){
+            id = new ObjectID(id);
+        }
+        else{
+            throw 'Id is invalid!(in history.get)'
+        }
+    }
+
+    let todel = await getuser(id);
+
+    const userCollection = await users();
+    const deleteInfo = await userCollection.removeOne({ _id: id });
+    if (deleteInfo.deletedCount === 0) throw 'Insert fail!';
+
+    const historyCollection = await history();
+    const updatehistory = await historyCollection.update({ user: id.toString() } , { $set: { user: "NA" }});
+
+    return todel;
+}
+
 async function gethistory(id){
     if(id === undefined){
         throw 'input is empty';
     }
     if(id.constructor != ObjectID){
         if(ObjectID.isValid(id)){
-            uid = new ObjectID(id);
+            id = new ObjectID(id);
         }
         else{
             throw 'Id is invalid!(in history.get)'
@@ -86,6 +136,8 @@ async function addHistory(title , price , sale , url , img , user) {
 module.exports = {
     getuser,
     adduser,
-    addHistory,
-    gethistorybyuser
+    updateuser,
+    deluser,
+    gethistorybyuser,
+    addHistory
 };
