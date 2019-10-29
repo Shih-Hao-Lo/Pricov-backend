@@ -128,8 +128,6 @@ async function addHistory(title , price , sale , url , img , user) {
     const historyCollection = await history();
     const InsertInfo = await historyCollection.insertOne(newhistory);
     user = new ObjectID(user);
-    const userCollection = await users();
-    const updateuser = await userCollection.update({ _id: user } , { $addToSet: { history: await gethistory(InsertInfo.insertedId) } });
     return await getuser(user);
 }
 
