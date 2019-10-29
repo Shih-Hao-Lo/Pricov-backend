@@ -2,22 +2,14 @@ const { GraphQLServer } = require('graphql-yoga')
 const db = require('./db')
 const dbf= db.dbfunction
 
-let links = [
-    {
-        _id: 'link-0',
-        url: 'www.howtographql.com',
-        description: 'Fullstack tutorial for GraphQL'
-    },
-    {
-        _id: 'link-1',
-        url: 'www.gooogle.com',
-        description: 'This is Google!'
-    }
-]
-let idCount = links.length
-
 const resolvers = {
     Query: {
+        feed: async (parents, args, context, info) => {
+            const out = await context.dbf.getAllUser();
+            console.log('out in feed');
+            console.log(out);
+            return out;
+        },
         finduser: async (parents, args, context, info) => {
             const inserted = await context.dbf.getuser(args._id)
             return inserted;

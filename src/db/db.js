@@ -24,6 +24,14 @@ async function getuser(id){
     return target;
 }
 
+async function getAllUser(){
+    const userCollection = await users();
+    const targets = await userCollection.find().toArray();
+    if(targets === null) throw 'user not found!';
+
+    return targets;
+}
+
 async function adduser(email) {
     let newuser = {
         email: email
@@ -133,6 +141,7 @@ async function addHistory(title , price , sale , url , img , user) {
 
 module.exports = {
     getuser,
+    getAllUser,
     adduser,
     updateuser,
     deluser,

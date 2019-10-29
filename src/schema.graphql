@@ -17,6 +17,7 @@
 # }
 
 type Query{
+    feed: [User!]
     finduser(_id: ID!): User
 }
 
