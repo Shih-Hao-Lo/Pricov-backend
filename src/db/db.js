@@ -2,7 +2,7 @@ const mongoCollections = require("./mongoCollections");
 const connection = require("./mongoConnection");
 const users = mongoCollections.users;
 const history = mongoCollections.history;
-const ObjectID = require('mongodb').ObjectID
+const ObjectID = require('mongodb').ObjectID;
 
 async function getuser(id){
     if(id === undefined){
