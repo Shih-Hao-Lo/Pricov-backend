@@ -16,25 +16,26 @@
 #   url: String!
 # }
 
-type Query{
+type Query {
     feed: [User!]
     finduser(_id: ID!): User
+    getstat: [Statistic!]
 }
 
-type Mutation{
+type Mutation {
     adduser(email: String!): User
     addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID!): User
     updateuser(_id: ID! , email: String!): User
     deleteuser(_id: ID!): User
 }
 
-type User{
+type User {
     _id: ID!
     email: String!
     History: [History!]
 }
 
-type History{
+type History {
     _id: ID!
     title: String!
     price: String!
@@ -42,4 +43,15 @@ type History{
     url: String!
     img: String!
     user: String!
+}
+
+type Statistic {
+    _id: ID!
+    website: String!
+    department: [Department!]
+}
+
+type Department {
+    name: String!
+    amount: Int!
 }

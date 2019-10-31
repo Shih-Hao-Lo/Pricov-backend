@@ -13,6 +13,10 @@ const resolvers = {
         finduser: async (parents, args, context, info) => {
             const inserted = await context.dbf.getuser(args._id)
             return inserted;
+        },
+        getstat: async (parents, args, context, info) => {
+            const inserted = await context.dbf.getstatistic()
+            return inserted;
         }
     },
     Mutation: {
@@ -60,6 +64,25 @@ const resolvers = {
         url: (parents) => parents.url,
         img: (parents) => parents.img,
         user: (parents) => parents.user,
+    },
+    Statistic: {
+        _id: (parents) => parents._id,
+        website: (parents) => parents.website,
+        department: (parents) => {
+            const data = parents.department;
+            var out = new Array(0);
+            for(s in data){
+                var obj = { name: s , amount: data[s] }
+                out.push(obj);
+            }
+            console.log('in statistic')
+            console.log(out)
+            return out;
+        }
+    },
+    Department: {
+        name: (parents) => parents.name,
+        amount: (parents) => parents.amount
     }
 }
 

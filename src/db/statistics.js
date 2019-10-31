@@ -3,7 +3,7 @@ const connection = require("./mongoConnection");
 const statistics = mongoCollections.statistics;
 const ObjectID = require('mongodb').ObjectID;
 
-async function get(){
+async function getstatistic(){
     const statisticsCollection = await statistics();
     const targets = await statisticsCollection.find().toArray();
     if(targets === null) throw 'user not found!';
@@ -11,7 +11,7 @@ async function get(){
     return targets;
 }
 
-async function add(website, department){
+async function addstatistic(website, department){
     const statisticsCollection = await statistics();
     const target = await statisticsCollection.findOne({ website: website });
     if(target === null) {
@@ -48,6 +48,11 @@ async function add(website, department){
         return await get();
     }
 }
+
+module.exports = {
+    getstatistic,
+    addstatistic
+};
 
 async function dummy(){
     const statisticsCollection = await statistics();

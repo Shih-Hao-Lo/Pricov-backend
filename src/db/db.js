@@ -2,8 +2,10 @@ const mongoCollections = require("./mongoCollections");
 const connection = require("./mongoConnection");
 const users = mongoCollections.users;
 const history = mongoCollections.history;
+const statistics = mongoCollections.statistics;
 const ObjectID = require('mongodb').ObjectID;
 
+//User
 async function getuser(id){
     if(id === undefined){
         throw 'input is empty';
@@ -94,6 +96,7 @@ async function deluser(id){
     return todel;
 }
 
+//History
 async function gethistory(id){
     if(id === undefined){
         throw 'input is empty';
@@ -139,6 +142,53 @@ async function addHistory(title , price , sale , url , img , user) {
     return await getuser(user);
 }
 
+//Statistics
+async function getstatistic(){
+    const statisticsCollection = await statistics();
+    const targets = await statisticsCollection.find().toArray();
+    if(targets === null) throw 'user not found!';
+
+    return targets;
+}
+
+async function addstatistic(website, department){
+    const statisticsCollection = await statistics();
+    const target = await statisticsCollection.findOne({ website: website });
+    if(target === null) {
+        let obj = {};
+        obj[department] = 1;
+        let newwebsite = {
+            website: website,
+            department: obj
+        }
+        let inserted = await statisticsCollection.insertOne(newwebsite);
+        return await get();
+    }
+    else{
+        let updateduser = null;
+        let obj = target.department
+        if(obj[department] == undefined){
+            obj[department] = 1;
+            updateduser = {
+                $set: {
+                    department: obj
+                }
+            }
+        }
+        else{
+            obj[department] = obj[department]+1;
+            updateduser = {
+                $set: {
+                    department: obj
+                }
+            }
+        }
+        let inserted = await statisticsCollection.updateOne({ _id: new ObjectID(target._id) } , updateduser);
+
+        return await get();
+    }
+}
+
 module.exports = {
     getuser,
     getAllUser,
@@ -146,5 +196,7 @@ module.exports = {
     updateuser,
     deluser,
     gethistorybyuser,
-    addHistory
+    addHistory,
+    getstatistic,
+    addstatistic
 };
