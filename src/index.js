@@ -11,8 +11,10 @@ const resolvers = {
             return out;
         },
         finduser: async (parents, args, context, info) => {
-            const inserted = await context.dbf.getuser(args._id)
-            return inserted;
+            const target = await context.dbf.getuser(args._id)
+            console.log('target in find user')
+            console.log(target)
+            return target;
         },
         getstat: async (parents, args, context, info) => {
             const inserted = await context.dbf.getstatistic()
@@ -50,10 +52,20 @@ const resolvers = {
         email: (parents) => parents.email,
         History: async (parents, args, context, info) => {
             console.log("in user history")
-            console.log(parents._id)
             let out = await context.dbf.gethistorybyuser(parents._id);
+            // console.log('out bef sort')
+            // console.log(out)
+            out.sort((a , b) => {
+                var ca,cb;
+                if(a.sale != 'NA') ca = a.sale;
+                else ca = a.price; 
+                if(b.sale != 'NA') cb = b.sale;
+                else cb = b.price; 
+                return parseInt(cb,10) - parseInt(ca,10);
+            })
+            console.log('out aft sort')
             console.log(out)
-            return out;
+            return out.slice(0,9);
         },
     },
     History: {

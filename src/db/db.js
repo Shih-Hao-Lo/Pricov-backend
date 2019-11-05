@@ -120,8 +120,8 @@ async function gethistory(id){
 async function gethistorybyuser(uid){
     const historyCollection = await history();
     const targets = await historyCollection.find({ user: uid.toString() }).toArray();
-    console.log("in gethistorybyuser")
-    console.log(uid.toString())
+    // console.log("in gethistorybyuser")
+    // console.log(uid.toString())
     if(targets === null) throw 'history not found!';
 
     return targets;
