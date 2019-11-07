@@ -6,21 +6,21 @@ const statistics = mongoCollections.statistics;
 const ObjectID = require('mongodb').ObjectID;
 
 //User
-async function getuser(id){
-    if(id === undefined){
-        throw 'input is empty';
-    }
-    if(id.constructor != ObjectID){
-        if(ObjectID.isValid(id)){
-            id = new ObjectID(id);
-        }
-        else{
-            throw 'Id is invalid!(in user.get)'
-        }
-    }
+async function getuser(email){
+    // if(id === undefined){
+    //     throw 'input is empty';
+    // }
+    // if(id.constructor != ObjectID){
+    //     if(ObjectID.isValid(id)){
+    //         id = new ObjectID(id);
+    //     }
+    //     else{
+    //         throw 'Id is invalid!(in user.get)'
+    //     }
+    // }
 
     const userCollection = await users();
-    const target = await userCollection.findOne({ _id: id });
+    const target = await userCollection.findOne({ email: email });
     if(target === null) throw 'user not found!';
 
     return target;

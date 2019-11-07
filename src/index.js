@@ -11,7 +11,7 @@ const resolvers = {
             return out;
         },
         finduser: async (parents, args, context, info) => {
-            const target = await context.dbf.getuser(args._id)
+            const target = await context.dbf.getuser(args.email)
             console.log('target in find user')
             console.log(target)
             return target;
