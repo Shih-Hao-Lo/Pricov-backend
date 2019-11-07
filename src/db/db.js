@@ -127,14 +127,15 @@ async function gethistorybyuser(uid){
     return targets;
 }
 
-async function addHistory(title , price , sale , url , img , user) {
+async function addHistory(title , price , sale , url , img , user , keyword) {
     let newhistory = {
         title: title,
         price: price,
         sale: sale,
         url: url,
         img: img,
-        user: user
+        user: user,
+        keyword: keyword
     }
     const historyCollection = await history();
     const InsertInfo = await historyCollection.insertOne(newhistory);

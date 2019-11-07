@@ -24,7 +24,7 @@ type Query {
 
 type Mutation {
     adduser(email: String!): User
-    addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID!): User
+    addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID! , keyword: String!): User
     updateuser(_id: ID! , email: String!): User
     deleteuser(_id: ID!): User
 }
@@ -43,6 +43,7 @@ type History {
     url: String!
     img: String!
     user: String!
+    keyword: String!
 }
 
 type Statistic {

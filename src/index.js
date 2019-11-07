@@ -29,7 +29,7 @@ const resolvers = {
             return out
         },
         addhistory: async (parents, args, context, info) => {
-            let out = await context.dbf.addHistory(args.title , args.price , args.sale , args.url , args.img , args.user)
+            let out = await context.dbf.addHistory(args.title , args.price , args.sale , args.url , args.img , args.user , args.keyword)
             console.log('out in addhistory');
             console.log(out);
             return out;
@@ -61,7 +61,7 @@ const resolvers = {
                 else ca = a.price; 
                 if(b.sale != 'NA') cb = b.sale;
                 else cb = b.price; 
-                return parseInt(cb,10) - parseInt(ca,10);
+                return parseInt(ca,10) - parseInt(cb,10);
             })
             console.log('out aft sort')
             console.log(out)
@@ -76,6 +76,7 @@ const resolvers = {
         url: (parents) => parents.url,
         img: (parents) => parents.img,
         user: (parents) => parents.user,
+        keyword: (parents) => parents.keyword,
     },
     Statistic: {
         _id: (parents) => parents._id,
