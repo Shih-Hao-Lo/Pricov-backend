@@ -65,7 +65,7 @@ const resolvers = {
             })
             console.log('out aft sort')
             console.log(out)
-            return out.slice(0,9);
+            return out;
         },
     },
     History: {
