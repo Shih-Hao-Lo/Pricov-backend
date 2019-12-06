@@ -1,5 +1,7 @@
 const data = require("./db");
+const mining = require("../js2py")
 
 module.exports = {
-    dbfunction: data
+    dbfunction: data,
+    miningfunction: mining
 };

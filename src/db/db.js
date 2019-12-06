@@ -26,6 +26,26 @@ async function getuser(email){
     return target;
 }
 
+async function getuserbyid(id){
+    // if(id === undefined){
+    //     throw 'input is empty';
+    // }
+    // if(id.constructor != ObjectID){
+    //     if(ObjectID.isValid(id)){
+    //         id = new ObjectID(id);
+    //     }
+    //     else{
+    //         throw 'Id is invalid!(in user.get)'
+    //     }
+    // }
+
+    const userCollection = await users();
+    const target = await userCollection.findOne({ _id: id });
+    if(target === null) throw 'user'+id+' not found!';
+
+    return target;
+}
+
 async function getAllUser(){
     const userCollection = await users();
     const targets = await userCollection.find().toArray();
@@ -140,7 +160,14 @@ async function addHistory(title , price , sale , url , img , user , keyword) {
     const historyCollection = await history();
     const InsertInfo = await historyCollection.insertOne(newhistory);
     user = new ObjectID(user);
-    return await getuser(user);
+    return await getuserbyid(user);
+}
+
+async function delHistory(user , keyword) {
+    const historyCollection = await history();
+    const InsertInfo = await historyCollection.deleteMany({ user: user, keyword: keyword });
+    user = new ObjectID(user);
+    return await getuserbyid(user);
 }
 
 //Statistics
@@ -198,6 +225,7 @@ module.exports = {
     deluser,
     gethistorybyuser,
     addHistory,
+    delHistory,
     getstatistic,
     addstatistic
 };
