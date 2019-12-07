@@ -2,8 +2,12 @@ const { GraphQLServer } = require('graphql-yoga')
 const db = require('./db')
 const dbf= db.dbfunction
 
+
+
+
 const resolvers = {
     Query: {
+      
         feed: async (parents, args, context, info) => {
             const out = await context.dbf.getAllUser();
             console.log('out in feed');
@@ -22,6 +26,7 @@ const resolvers = {
         }
     },
     Mutation: {
+       
         adduser: async (parents, args, context, info) => {
             let out = await context.dbf.adduser(args.email)
             console.log('out in adduser');
@@ -65,7 +70,7 @@ const resolvers = {
             })
             console.log('out aft sort')
             console.log(out)
-            return out.slice(0,9);
+            return out;
         },
     },
     History: {

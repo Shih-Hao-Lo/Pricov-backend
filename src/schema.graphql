@@ -20,6 +20,7 @@ type Query {
     feed: [User!]
     finduser(email: String!): User
     getstat: [Statistic!]
+    
 }
 
 type Mutation {
@@ -27,7 +28,10 @@ type Mutation {
     addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID! , keyword: String!): User
     updateuser(_id: ID! , email: String!): User
     deleteuser(_id: ID!): User
+    
 }
+
+
 
 type User {
     _id: ID!

@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "graphql-yoga": "^1.18.3",
-    "mongodb": "^3.3.3"
+    "mongodb": "^3.3.3",
+    "bluebird": "^3.7.1",
+    "redis": "^2.8.0"
   }
 }
