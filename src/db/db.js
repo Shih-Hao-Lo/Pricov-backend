@@ -14,16 +14,29 @@ async function getuser(email){
     if(target === null) throw 'user not found!';
 
     return target;
+
 }
+
 async function getuserbyid(id){
-    console.log('get user by id')
+    // if(id === undefined){
+    //     throw 'input is empty';
+    // }
+    // if(id.constructor != ObjectID){
+    //     if(ObjectID.isValid(id)){
+    //         id = new ObjectID(id);
+    //     }
+    //     else{
+    //         throw 'Id is invalid!(in user.get)'
+    //     }
+    // }
+
     const userCollection = await users();
     const target = await userCollection.findOne({ _id: id });
-    console.log('target,',target)
-    if(target === null) throw 'user not found!';
+    if(target === null) throw 'user'+id+' not found!';
 
     return target;
 }
+
 async function getAllUser(){
     const userCollection = await users();
     const targets = await userCollection.find().toArray();
@@ -150,6 +163,13 @@ async function addHistory(title , price , sale , url , img , user , keyword) {
     return await getuserbyid(user);
 }
 
+async function delHistory(user , keyword) {
+    const historyCollection = await history();
+    const InsertInfo = await historyCollection.deleteMany({ user: user, keyword: keyword });
+    user = new ObjectID(user);
+    return await getuserbyid(user);
+}
+
 //Statistics
 async function getstatistic(){
     const statisticsCollection = await statistics();
@@ -206,6 +226,7 @@ module.exports = {
     deluser,
     gethistorybyuser,
     addHistory,
+    delHistory,
     getstatistic,
     addstatistic
 };

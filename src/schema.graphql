@@ -28,7 +28,7 @@ type Mutation {
     addhistory(title: String! , price: String! , sale: String! , url: String! , img: String! , user: ID! , keyword: String!): User
     updateuser(_id: ID! , email: String!): User
     deleteuser(_id: ID!): User
-    
+    webmine(email: String!, keyword: String!, website: [String]!): User
 }
 
 

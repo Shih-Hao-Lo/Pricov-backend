@@ -1,6 +1,9 @@
 const { GraphQLServer } = require('graphql-yoga')
 const db = require('./db')
-const dbf= db.dbfunction
+const dbf = db.dbfunction
+const minf = db.miningfunction
+const fs = require('fs')
+const axios = require('axios')
 
 
 
@@ -34,13 +37,13 @@ const resolvers = {
             return out
         },
         addhistory: async (parents, args, context, info) => {
-            let out = await context.dbf.addHistory(args.title , args.price , args.sale , args.url , args.img , args.user , args.keyword)
+            let out = await context.dbf.addHistory(args.title, args.price, args.sale, args.url, args.img, args.user, args.keyword)
             console.log('out in addhistory');
             console.log(out);
             return out;
         },
         updateuser: async (parents, args, context, info) => {
-            let out = await context.dbf.updateuser(args._id , args.email);
+            let out = await context.dbf.updateuser(args._id, args.email);
             console.log('out in updateuser');
             console.log(out);
             return out;
@@ -50,6 +53,18 @@ const resolvers = {
             console.log('out in deluser');
             console.log(out);
             return out;
+        },
+        webmine: async (parents, args, context, info) => {
+            var response = await axios.get('http://localhost:3001/?keyword='+args.keyword)
+            var arr = response.data.split('\n')
+            console.log(arr)
+            var user = await context.dbf.getuser(args.email)
+            var todel = await context.dbf.delHistory(user._id.toString(),args.keyword)
+            for(var x = 0 ; x < 20 ; x++){
+                var obj = arr[x].split('\t')
+                var addrd = await context.dbf.addHistory(obj[0],obj[1],obj[2],obj[3],obj[4],user._id.toString(),args.keyword);
+            }
+            return await context.dbf.getuser(args.email)
         }
     },
     User: {
@@ -60,13 +75,13 @@ const resolvers = {
             let out = await context.dbf.gethistorybyuser(parents._id);
             // console.log('out bef sort')
             // console.log(out)
-            out.sort((a , b) => {
-                var ca,cb;
-                if(a.sale != 'NA') ca = a.sale;
-                else ca = a.price; 
-                if(b.sale != 'NA') cb = b.sale;
-                else cb = b.price; 
-                return parseInt(ca,10) - parseInt(cb,10);
+            out.sort((a, b) => {
+                var ca, cb;
+                if (a.sale != 'NA') ca = a.sale;
+                else ca = a.price;
+                if (b.sale != 'NA') cb = b.sale;
+                else cb = b.price;
+                return parseInt(ca, 10) - parseInt(cb, 10);
             })
             console.log('out aft sort')
             console.log(out)
@@ -89,8 +104,8 @@ const resolvers = {
         department: (parents) => {
             const data = parents.department;
             var out = new Array(0);
-            for(s in data){
-                var obj = { name: s , amount: data[s] }
+            for (s in data) {
+                var obj = { name: s, amount: data[s] }
                 out.push(obj);
             }
             console.log('in statistic')
@@ -107,7 +122,7 @@ const resolvers = {
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    context: { dbf },
+    context: { dbf: dbf },
 })
 
 server.start(() => console.log(`Server is running on http://localhost:4000`))
