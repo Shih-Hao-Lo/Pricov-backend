@@ -50,7 +50,7 @@ const resolvers = {
             return out;
         },
         webmine: async (parents, args, context, info) => {
-            var response = await axios.get('http://localhost:3001/?keyword='+args.keyword)
+            var response = await axios.get('http://localhost:3001/amazon?keyword='+args.keyword)
             var arr = response.data.split('\n')
             console.log(arr)
             var user = await context.dbf.getuser(args.email)
