@@ -89,3 +89,4 @@ typings/
 
 ./py-backend/node_modules
 *.txt
+*.txt
