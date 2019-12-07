@@ -5,7 +5,7 @@ var PythonShell = require('python-shell');
 
 var app = express();
 
-app.get('/', async (req , res) => {
+app.get('/amazon', async (req , res) => {
     kw=req.query.keyword.split(' ')
     var process = spawn('python', ["./amazon.py", kw[0] , kw[1]]);
     process.stdout.on('data', function (data) {

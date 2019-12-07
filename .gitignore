@@ -88,4 +88,6 @@ typings/
 .dynamodb/
 
 ./py-backend/node_modules
-./py-backend/*.txt
+*.txt
+*.txt
+py-backend/amazon.txt
