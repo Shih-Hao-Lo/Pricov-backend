@@ -55,9 +55,25 @@ const resolvers = {
             console.log(arr)
             var user = await context.dbf.getuser(args.email)
             var todel = await context.dbf.delHistory(user._id.toString(),args.keyword)
-            for(var x = 0 ; x < 20 ; x++){
+            var x = 0;
+            var end = 0;
+            while(end < 20 && x < arr.length){
                 var obj = arr[x].split('\t')
-                var addrd = await context.dbf.addHistory(obj[0],obj[1],obj[2],obj[3],obj[4],user._id.toString(),args.keyword);
+                x++;
+                if(obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
+                if(obj[1] == 'NA.NA') continue;
+                price = ''
+                sale = ''
+                if(obj[2] != 'NA'){
+                    price = obj[2].replace('$','');
+                    sale = obj[1];
+                }
+                else{
+                    price = obj[1];
+                    sale = obj[2];
+                }
+                var addrd = await context.dbf.addHistory(obj[0],price,sale,obj[3],obj[4],user._id.toString(),args.keyword);
+                end++;
             }
             return await context.dbf.getuser(args.email)
         }
