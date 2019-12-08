@@ -5,6 +5,7 @@ import sys
 print('in py!')
 print(sys.argv[1])
 url='https://www.amazon.com/s?k='+sys.argv[1]+'+'+sys.argv[2]
+#url='https://www.amazon.com/s?k='+'apple'+'+'+'phone'
 
 #open the browser and visit the url
 driver = webdriver.Chrome('./chromedriver')
@@ -53,7 +54,14 @@ for tweet in tweets:
             
     else:
         title,integer,decimal,pic,sale,link='NA','NA','NA','NA','NA','NA'
+        skip='NA'
         
+        try:
+            skip = tweet.find_element_by_css_selector("[class$=a-color-secondary]").text
+        except: skip='NA'
+        print(skip)
+        if skip == 'Sponsored': continue
+    
         try: title=tweet.find_element_by_css_selector("[class$=a-text-normal]").text#$:end with
         except: title='NA'    
     
@@ -75,7 +83,7 @@ for tweet in tweets:
         except: link='NA'
         
         fw.write(title.replace('\n',' ')+'\t'+str(integer)+'.'+str(decimal)+'\t'+sale+'\t'+link+'\t'+pic+'\n')
-        print(title.replace('\n',' ')+'\t'+str(integer)+'.'+str(decimal)+'\t'+pic+'\n')
+        #print(title.replace('\n',' ')+'\t'+str(integer)+'.'+str(decimal)+'\t'+pic+'\n')
         #print('link',link)
 
 fw.close()
