@@ -52,11 +52,11 @@ async function adduser(email) {
     }
      
     const userCollection = await users();
-    const existone = await userCollection.find({email:email}).toArray()
+    const existone = await userCollection.findOne({ email:email })
     console.log('existone,',existone)
-    if(existone.length >= 1){
+    if(existone != null){
         console.log('exist')
-        throw 'Account exists'
+        return existone
     }else{
         console.log('does not exist')
         const InsertInfo = await userCollection.insertOne(newuser);
@@ -222,8 +222,6 @@ async function addstatistic(website, department){
             }
         }
         let inserted = await statisticsCollection.updateOne({ _id: new ObjectID(target._id) } , updateduser);
-
-        return await get();
     }
 }
 
