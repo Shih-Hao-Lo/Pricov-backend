@@ -6,16 +6,13 @@ Created on Tue Oct 15 00:15:22 2019
 @author: wesley
 """
 from selenium import webdriver
-from bs4 import BeautifulSoup
-import re
-import time
-import requests
 import codecs
-import pymongo
 import sys
+numset = {'0','1','2','3','4','5','6','7','8','9'}
 
 url='https://www.bestbuy.com/site/searchpage.jsp?st='
 key=sys.argv[1]+'+'+sys.argv[2]
+#key='apple+laptop'
 driver = webdriver.Chrome('./chromedriver')
 driver.get(url+key)
 
@@ -26,12 +23,12 @@ itemList = []
 
 for p in range(1,pageNum+1): # for each page 
     
-    print ('page',p)
+    #print ('page',p)
     html=None
 
     if p==1: 
         pageLink=url+key # url for page 1
-        print('pageLink,', pageLink)
+        #print('pageLink,', pageLink)
     else: pageLink=url+'cp='+str(p)+'st='+key # make the page url
 		
     items=driver.find_elements_by_css_selector("[class=sku-item]")
@@ -49,14 +46,16 @@ for p in range(1,pageNum+1): # for each page
                 
              
         except:
-            print ('no name')
+            name='NA'
+            #print ('no name')
             
         try:          
             imageChunk=item.find_element_by_tag_name("img")
             if imageChunk: 
                 image=imageChunk.get_attribute('src')#.encode('ascii','ignore')   
         except:
-            print ('no image')
+            image='NA'
+            #print ('no image')
         
         try:          
             priceChunk=item.find_element_by_css_selector("[class$=priceView-customer-price]").text
@@ -67,7 +66,8 @@ for p in range(1,pageNum+1): # for each page
                 #price=priceChunk.strip().replace('\n','')#.encode('ascii','ignore')   
             price = price.replace('$','')
         except:
-            print ('no price')
+            price='NA'
+            #print ('no price')
         
         try:
             mo=item.find_element_by_css_selector("[class=priceView-subscription-units]").text
@@ -81,10 +81,11 @@ for p in range(1,pageNum+1): # for each page
             try:
                 sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
                 sale2=sale2tmp.find_element_by_css_selector("[class=sr-only]").text
-                print('sale2',sale2.replace('\n',''))
+                #print('sale2',sale2.replace('\n',''))
                 sale2=sale2.replace('The previous price for this item was $','')
             except:
-                print('no sale')
+                sale2='NA'
+                #print('no sale')
 
         try: 
             sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
@@ -95,12 +96,28 @@ for p in range(1,pageNum+1): # for each page
         itemList.append({'name':name, 'price':price, 'image': image})
 
         if sale2 !='NA': sale=sale2
-
-        print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
+       # print(str(len(mo))+'|'+str(len(mo2)))
+        if len(mo) != 0:
+            month = item.find_element_by_css_selector("[class=priceView-price-disclaimer__activation]").text
+            tmp = ''
+            for char in month:
+                if char ==';': break
+                if not char in numset: continue
+                tmp+=char
+            month=tmp
+            #print(month)
+            if price != 'NA': 
+                price2=float(price)*int(month)
+                price=price2
+            if sale != 'NA': 
+                sale2=float(sale)*int(month)
+                sale=sale2
+        
+        #print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
         if sale == 'NA':
-            fw.write(name + '\t' + price + mo + '\t' + sale + mo2 + '\t' + url + '\t' + image + '\n') # write to file 
+            fw.write(name + '\t' + str(price) + '\t' + str(sale) + '\t' + url + '\t' + image + '\n') # write to file 
         else:
-            fw.write(name + '\t' + sale + mo + '\t' + price  + mo2+ '\t' + url + '\t' + image + '\n') 
+            fw.write(name + '\t' + str(sale) + '\t' + str(price) + '\t' + url + '\t' + image + '\n') 
 		
     
 
