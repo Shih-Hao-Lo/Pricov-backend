@@ -65,7 +65,7 @@ const resolvers = {
                 if (args.website[web].toLowerCase() == 'amazon') {
                     var response = await axios.get('http://localhost:3001/amazon?keyword=' + args.keyword)
                     var arr = response.data.split('\n')
-                    console.log('in wibmine');
+                    console.log('in wibmine amazon');
                     // console.log(arr);
                     var user = await context.dbf.getuser(args.email)
                     var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
@@ -98,6 +98,21 @@ const resolvers = {
                 }
                 else if (args.website[web].toLowerCase() == 'bestbuy') {
                     // Impelment py here
+                    var response = await axios.get('http://localhost:3001/bestbuy?keyword=' + args.keyword)
+                    var arr = response.data.split('\n')
+                    console.log('in wibmine bestbuy');
+                    console.log(arr)
+                    var user = await context.dbf.getuser(args.email)
+                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
+                    var x = 0;
+                    var end = 0;
+                    while (end < 20 && x < arr.length) {
+                        var obj = arr[x].split('\t')
+                        x++;
+                        if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
+                        var addrd = await context.dbf.addHistory(obj[0], obj[1], obj[2], obj[3], obj[4], user._id.toString(), args.keyword);
+                        end++;
+                    }
                     await context.dbf.addstatistic('bestbuy', args.keyword);
                     console.log('Best Buy!');
                 }

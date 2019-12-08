@@ -12,9 +12,10 @@ import time
 import requests
 import codecs
 import pymongo
+import sys
 
 url='https://www.bestbuy.com/site/searchpage.jsp?st='
-key='cellphone'
+key=sys.argv[1]+'+'+sys.argv[2]
 driver = webdriver.Chrome('./chromedriver')
 driver.get(url+key)
 
@@ -38,8 +39,9 @@ for p in range(1,pageNum+1): # for each page
     for item in items:
      
         name, image, price, sale, link ='NA', 'NA', '', 'NA', 'NA' # initialize critic and text 
-        
-        try:          
+        mo,sale2='NA','NA'
+        mo2='NA'
+        try:         
             nameChunk=item.find_element_by_css_selector("[class*=sku-title]")
             if nameChunk: 
                 name=nameChunk.text.strip()#.encode('ascii','ignore')
@@ -66,34 +68,41 @@ for p in range(1,pageNum+1): # for each page
             price = price.replace('$','')
         except:
             print ('no price')
+        
+        try:
+            mo=item.find_element_by_css_selector("[class=priceView-subscription-units]").text
+        except:
+            mo=''
+
         try:          
             sale=item.find_element_by_css_selector("[class=pricing-price__regular-price]").text
             sale = sale.replace('Was $','')
         except:
-            print('no sale')
-        itemList.append({'name':name, 'price':price, 'image': image})   
+            try:
+                sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
+                sale2=sale2tmp.find_element_by_css_selector("[class=sr-only]").text
+                print('sale2',sale2.replace('\n',''))
+                sale2=sale2.replace('The previous price for this item was $','')
+            except:
+                print('no sale')
+
+        try: 
+            sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
+            mo2=sale2tmp.find_element_by_css_selector("[class=priceView-subscription-units]").text
+        except:
+            mo2=''
+
+        itemList.append({'name':name, 'price':price, 'image': image})
+
+        if sale2 !='NA': sale=sale2
+
         print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
         if sale == 'NA':
-            fw.write(name + '\t' + price+ '\t' + sale + '\t' + url + '\t' + image + '\n') # write to file 
+            fw.write(name + '\t' + price + mo + '\t' + sale + mo2 + '\t' + url + '\t' + image + '\n') # write to file 
         else:
-            fw.write(name + '\t' + sale+ '\t' + price + '\t' + url + '\t' + image + '\n') 
+            fw.write(name + '\t' + sale + mo + '\t' + price  + mo2+ '\t' + url + '\t' + image + '\n') 
 		
     
 
 fw.close()
-#driver.quit()
-
-#myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-#dblist = myclient.list_database_names()
-#if "bia660" in dblist:
-#    print("The database exists.")
-#    collist = mydb.list_collection_names()
-#    if "cellphone" in collist:
-#        print("The collection exists.")
-#else:
-#    print("The database does not exist")
-#    mydb = myclient["bia660"]
-#    mycol = mydb["cellphone"]
-    
-#    x = mycol.insert_many(itemList)
-
+driver.quit()
