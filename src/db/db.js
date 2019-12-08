@@ -7,23 +7,14 @@ const ObjectID = require('mongodb').ObjectID;
 
 //User
 async function getuser(email){
-    // if(id === undefined){
-    //     throw 'input is empty';
-    // }
-    // if(id.constructor != ObjectID){
-    //     if(ObjectID.isValid(id)){
-    //         id = new ObjectID(id);
-    //     }
-    //     else{
-    //         throw 'Id is invalid!(in user.get)'
-    //     }
-    // }
-
+    console.log('get user')
     const userCollection = await users();
     const target = await userCollection.findOne({ email: email });
+    console.log('target,',target)
     if(target === null) throw 'user not found!';
 
     return target;
+
 }
 
 async function getuserbyid(id){
@@ -49,21 +40,30 @@ async function getuserbyid(id){
 async function getAllUser(){
     const userCollection = await users();
     const targets = await userCollection.find().toArray();
-    if(targets === null) throw 'user not found!';
+    if(targets.length === 0) throw 'user not found!';
 
     return targets;
 }
 
 async function adduser(email) {
+    console.log('add user')
     let newuser = {
         email: email
     }
-
+     
     const userCollection = await users();
-    const InsertInfo = await userCollection.insertOne(newuser);
-    if (InsertInfo.insertedCount === 0) throw 'Insert fail!';
-
-    return await getuser(InsertInfo.insertedId);
+    const existone = await userCollection.find({email:email}).toArray()
+    console.log('existone,',existone)
+    if(existone.length >= 1){
+        console.log('exist')
+        throw 'Account exists'
+    }else{
+        console.log('does not exist')
+        const InsertInfo = await userCollection.insertOne(newuser);
+        if (InsertInfo.insertedCount === 0) throw 'Insert fail!';
+       
+        return await getuserbyid(InsertInfo.insertedId);
+    }
 }
 
 async function updateuser(id , email){
@@ -88,7 +88,7 @@ async function updateuser(id , email){
     const updateInfo = await userCollection.updateOne({ _id: id } , updateduser);
     if (updateInfo.modifiedCount === 0) throw 'Insert fail!';
 
-    return await getuser(id);
+    return await getuserbyid(id);
 }
 
 async function deluser(id){
@@ -104,7 +104,7 @@ async function deluser(id){
         }
     }
 
-    let todel = await getuser(id);
+    let todel = await getuserbyid(id);
 
     const userCollection = await users();
     const deleteInfo = await userCollection.removeOne({ _id: id });
@@ -229,6 +229,7 @@ async function addstatistic(website, department){
 
 module.exports = {
     getuser,
+    getuserbyid,
     getAllUser,
     adduser,
     updateuser,

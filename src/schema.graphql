@@ -21,6 +21,7 @@ type Query {
     finduser(email: String!): User
     findHistory(email: String, keyword: String!): [History!]
     getstat: [Statistic!]
+    
 }
 
 type Mutation {
@@ -30,6 +31,8 @@ type Mutation {
     deleteuser(_id: ID!): User
     webmine(email: String!, keyword: String!, website: [String]!): User
 }
+
+
 
 type User {
     _id: ID!

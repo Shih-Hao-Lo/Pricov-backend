@@ -5,8 +5,12 @@ const minf = db.miningfunction
 const fs = require('fs')
 const axios = require('axios')
 
+
+
+
 const resolvers = {
     Query: {
+      
         feed: async (parents, args, context, info) => {
             const out = await context.dbf.getAllUser();
             console.log('out in feed');
@@ -30,6 +34,7 @@ const resolvers = {
         }
     },
     Mutation: {
+       
         adduser: async (parents, args, context, info) => {
             let out = await context.dbf.adduser(args.email)
             console.log('out in adduser');
