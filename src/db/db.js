@@ -147,6 +147,16 @@ async function gethistorybyuser(uid){
     return targets;
 }
 
+async function gethistorybyuserkw(uid , keyword){
+    const historyCollection = await history();
+    const targets = await historyCollection.find({ user: uid.toString(), keyword: keyword }).toArray();
+    // console.log("in gethistorybyuserkw")
+    // console.log(uid.toString())
+    if(targets === null) throw 'history not found!';
+
+    return targets;
+}
+
 async function addHistory(title , price , sale , url , img , user , keyword) {
     let newhistory = {
         title: title,
@@ -224,6 +234,7 @@ module.exports = {
     updateuser,
     deluser,
     gethistorybyuser,
+    gethistorybyuserkw,
     addHistory,
     delHistory,
     getstatistic,

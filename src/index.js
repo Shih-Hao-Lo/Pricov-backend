@@ -22,6 +22,11 @@ const resolvers = {
         getstat: async (parents, args, context, info) => {
             const inserted = await context.dbf.getstatistic()
             return inserted;
+        },
+        findHistory: async (parents, args, context, info) => {
+            const user = await context.dbf.getuser(args.email);
+            const targets = await context.dbf.gethistorybyuserkw(user._id , args.keyword);
+            return targets;
         }
     },
     Mutation: {

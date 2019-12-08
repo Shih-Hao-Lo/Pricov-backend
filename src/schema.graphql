@@ -19,6 +19,7 @@
 type Query {
     feed: [User!]
     finduser(email: String!): User
+    findHistory(email: String, keyword: String!): [History!]
     getstat: [Statistic!]
 }
 
