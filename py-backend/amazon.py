@@ -14,7 +14,7 @@ driver.get(url)
 tweets=driver.find_elements_by_css_selector("[class*=s-result-item]")#*:contains
 #print(len(tweets))
 #write the tweets to a file
-fw=codecs.open('amazon.txt','a',encoding='utf8')
+fw=codecs.open('amazon.txt','w',encoding='utf8')
 for tweet in tweets:
     #print('asin',tweet.get_attribute('data-asin')=='',tweet.get_attribute('data-asin'))
     if tweet.get_attribute('data-asin')=='':
