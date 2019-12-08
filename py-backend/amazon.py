@@ -1,5 +1,5 @@
 from selenium import webdriver
-import time,codecs
+import codecs
 import sys 
 
 print('in py!')

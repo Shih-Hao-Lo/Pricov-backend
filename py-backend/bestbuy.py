@@ -6,15 +6,13 @@ Created on Tue Oct 15 00:15:22 2019
 @author: wesley
 """
 from selenium import webdriver
-from bs4 import BeautifulSoup
-import re
-import time
-import requests
 import codecs
-import pymongo
+import sys
+numset = {'0','1','2','3','4','5','6','7','8','9'}
 
 url='https://www.bestbuy.com/site/searchpage.jsp?st='
-key='cellphone'
+key=sys.argv[1]+'+'+sys.argv[2]
+#key='apple+laptop'
 driver = webdriver.Chrome('./chromedriver')
 driver.get(url+key)
 
@@ -25,12 +23,12 @@ itemList = []
 
 for p in range(1,pageNum+1): # for each page 
     
-    print ('page',p)
+    #print ('page',p)
     html=None
 
     if p==1: 
         pageLink=url+key # url for page 1
-        print('pageLink,', pageLink)
+        #print('pageLink,', pageLink)
     else: pageLink=url+'cp='+str(p)+'st='+key # make the page url
 		
     items=driver.find_elements_by_css_selector("[class=sku-item]")
@@ -38,8 +36,9 @@ for p in range(1,pageNum+1): # for each page
     for item in items:
      
         name, image, price, sale, link ='NA', 'NA', '', 'NA', 'NA' # initialize critic and text 
-        
-        try:          
+        mo,sale2='NA','NA'
+        mo2='NA'
+        try:         
             nameChunk=item.find_element_by_css_selector("[class*=sku-title]")
             if nameChunk: 
                 name=nameChunk.text.strip()#.encode('ascii','ignore')
@@ -47,14 +46,16 @@ for p in range(1,pageNum+1): # for each page
                 
              
         except:
-            print ('no name')
+            name='NA'
+            #print ('no name')
             
         try:          
             imageChunk=item.find_element_by_tag_name("img")
             if imageChunk: 
                 image=imageChunk.get_attribute('src')#.encode('ascii','ignore')   
         except:
-            print ('no image')
+            image='NA'
+            #print ('no image')
         
         try:          
             priceChunk=item.find_element_by_css_selector("[class$=priceView-customer-price]").text
@@ -65,35 +66,61 @@ for p in range(1,pageNum+1): # for each page
                 #price=priceChunk.strip().replace('\n','')#.encode('ascii','ignore')   
             price = price.replace('$','')
         except:
-            print ('no price')
+            price='NA'
+            #print ('no price')
+        
+        try:
+            mo=item.find_element_by_css_selector("[class=priceView-subscription-units]").text
+        except:
+            mo=''
+
         try:          
             sale=item.find_element_by_css_selector("[class=pricing-price__regular-price]").text
             sale = sale.replace('Was $','')
+            sale = sale.replace('Reg $','')
         except:
-            print('no sale')
-        itemList.append({'name':name, 'price':price, 'image': image})   
-        print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
+            try:
+                sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
+                sale2=sale2tmp.find_element_by_css_selector("[class=sr-only]").text
+                #print('sale2',sale2.replace('\n',''))
+                sale2=sale2.replace('The previous price for this item was $','')
+            except:
+                sale2='NA'
+                #print('no sale')
+
+        try: 
+            sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
+            mo2=sale2tmp.find_element_by_css_selector("[class=priceView-subscription-units]").text
+        except:
+            mo2=''
+
+        itemList.append({'name':name, 'price':price, 'image': image})
+
+        if sale2 !='NA': sale=sale2
+       # print(str(len(mo))+'|'+str(len(mo2)))
+        if len(mo) != 0:
+            month = item.find_element_by_css_selector("[class=priceView-price-disclaimer__activation]").text
+            tmp = ''
+            for char in month:
+                if char ==';': break
+                if not char in numset: continue
+                tmp+=char
+            month=tmp
+            #print(month)
+            if price != 'NA': 
+                price2=float(price)*int(month)
+                price=price2
+            if sale != 'NA': 
+                sale2=float(sale)*int(month)
+                sale=sale2
+        
+        #print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
         if sale == 'NA':
-            fw.write(name + '\t' + price+ '\t' + sale + '\t' + url + '\t' + image + '\n') # write to file 
+            fw.write(name + '\t' + str(price) + '\t' + str(sale) + '\t' + url + '\t' + image + '\n') # write to file 
         else:
-            fw.write(name + '\t' + sale+ '\t' + price + '\t' + url + '\t' + image + '\n') 
+            fw.write(name + '\t' + str(sale) + '\t' + str(price) + '\t' + url + '\t' + image + '\n') 
 		
     
 
 fw.close()
-#driver.quit()
-
-#myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-#dblist = myclient.list_database_names()
-#if "bia660" in dblist:
-#    print("The database exists.")
-#    collist = mydb.list_collection_names()
-#    if "cellphone" in collist:
-#        print("The collection exists.")
-#else:
-#    print("The database does not exist")
-#    mydb = myclient["bia660"]
-#    mycol = mydb["cellphone"]
-    
-#    x = mycol.insert_many(itemList)
-
+driver.quit()
