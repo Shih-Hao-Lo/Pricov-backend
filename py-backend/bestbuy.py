@@ -77,6 +77,7 @@ for p in range(1,pageNum+1): # for each page
         try:          
             sale=item.find_element_by_css_selector("[class=pricing-price__regular-price]").text
             sale = sale.replace('Was $','')
+            sale = sale.replace('Reg $','')
         except:
             try:
                 sale2tmp=item.find_element_by_css_selector("[class$=priceView-previous-price]")
