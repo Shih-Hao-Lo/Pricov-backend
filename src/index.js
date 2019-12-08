@@ -10,7 +10,7 @@ const axios = require('axios')
 
 const resolvers = {
     Query: {
-      
+
         feed: async (parents, args, context, info) => {
             const out = await context.dbf.getAllUser();
             console.log('out in feed');
@@ -26,15 +26,21 @@ const resolvers = {
         getstat: async (parents, args, context, info) => {
             const inserted = await context.dbf.getstatistic()
             return inserted;
+        },
+        findHistory: async (parents, args, context, info) => {
+            const user = await context.dbf.getuser(args.email);
+            const targets = await context.dbf.gethistorybyuserkw(user._id, args.keyword);
+            return targets;
         }
     },
     Mutation: {
-       
+
         adduser: async (parents, args, context, info) => {
             let out = await context.dbf.adduser(args.email)
             console.log('out in adduser');
             console.log(out);
             return out
+
         },
         addhistory: async (parents, args, context, info) => {
             let out = await context.dbf.addHistory(args.title, args.price, args.sale, args.url, args.img, args.user, args.keyword)
@@ -55,31 +61,53 @@ const resolvers = {
             return out;
         },
         webmine: async (parents, args, context, info) => {
-            var response = await axios.get('http://localhost:3001/amazon?keyword='+args.keyword)
-            var arr = response.data.split('\n')
-            console.log(arr)
-            var user = await context.dbf.getuser(args.email)
-            var todel = await context.dbf.delHistory(user._id.toString(),args.keyword)
-            var x = 0;
-            var end = 0;
-            while(end < 20 && x < arr.length){
-                var obj = arr[x].split('\t')
-                x++;
-                if(obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
-                if(obj[1] == 'NA.NA') continue;
-                price = ''
-                sale = ''
-                if(obj[2] != 'NA'){
-                    price = obj[2].replace('$','');
-                    sale = obj[1];
+            for (var web = 0; web < args.website.length; web++) {
+                if (args.website[web].toLowerCase() == 'amazon') {
+                    var response = await axios.get('http://localhost:3001/amazon?keyword=' + args.keyword)
+                    var arr = response.data.split('\n')
+                    console.log('in wibmine');
+                    // console.log(arr);
+                    var user = await context.dbf.getuser(args.email)
+                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
+                    var x = 0;
+                    var end = 0;
+                    while (end < 20 && x < arr.length) {
+                        var obj = arr[x].split('\t')
+                        x++;
+                        if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
+                        if (obj[1] == 'NA.NA') continue;
+                        price = ''
+                        sale = ''
+                        if (obj[2] != 'NA') {
+                            price = obj[2].replace('$', '');
+                            sale = obj[1];
+                        }
+                        else {
+                            price = obj[1];
+                            sale = obj[2];
+                        }
+                        var addrd = await context.dbf.addHistory(obj[0], price, sale, obj[3], obj[4], user._id.toString(), args.keyword);
+                        end++;
+                    }
+                    await context.dbf.addstatistic('amazon', args.keyword);
                 }
-                else{
-                    price = obj[1];
-                    sale = obj[2];
+                else if (args.website[web].toLowerCase() == 'target') {
+                    // Impelment py here
+                    await context.dbf.addstatistic('target', args.keyword);
+                    console.log('Target!');
                 }
-                var addrd = await context.dbf.addHistory(obj[0],price,sale,obj[3],obj[4],user._id.toString(),args.keyword);
-                end++;
+                else if (args.website[web].toLowerCase() == 'bestbuy') {
+                    // Impelment py here
+                    await context.dbf.addstatistic('bestbuy', args.keyword);
+                    console.log('Best Buy!');
+                }
+                else {
+                    // Impelment py here
+                    await context.dbf.addstatistic('other', args.keyword);
+                    console.log('Other!')
+                }
             }
+
             return await context.dbf.getuser(args.email)
         }
     },
