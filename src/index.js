@@ -61,14 +61,16 @@ const resolvers = {
             return out;
         },
         webmine: async (parents, args, context, info) => {
+            console.log('args,',args)
+            var user = await context.dbf.getuser(args.email)
+            var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
             for (var web = 0; web < args.website.length; web++) {
                 if (args.website[web].toLowerCase() == 'amazon') {
+                    console.log('in amazon')
                     var response = await axios.get('http://localhost:3001/amazon?keyword=' + args.keyword)
                     var arr = response.data.split('\n')
                     console.log('in wibmine amazon');
                     // console.log(arr);
-                    var user = await context.dbf.getuser(args.email)
-                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
                     var x = 0;
                     var end = 0;
                     while (end < 20 && x < arr.length) {
@@ -97,13 +99,12 @@ const resolvers = {
                     console.log('Target!');
                 }
                 else if (args.website[web].toLowerCase() == 'bestbuy') {
+                    console.log('in bestbuy')
                     // Impelment py here
                     var response = await axios.get('http://localhost:3001/bestbuy?keyword=' + args.keyword)
                     var arr = response.data.split('\n')
                     console.log('in wibmine bestbuy');
                     console.log(arr)
-                    var user = await context.dbf.getuser(args.email)
-                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
                     var x = 0;
                     var end = 0;
                     while (end < 20 && x < arr.length) {
