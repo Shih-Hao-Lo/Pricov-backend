@@ -5,7 +5,7 @@ import time
 import re
 
 
-url='https://www.ebay.com/sch/i.html?_nkw=apple+laptop'
+url='https://www.ebay.com/sch/i.html?_nkw='+sys.argv[1]+'+'+sys.argv[2]
 
 #open the browser and visit the url
 driver = webdriver.Chrome('./chromedriver')
@@ -38,7 +38,8 @@ for item in data:
         
     try:
         pricetmp = item.find_element_by_css_selector('[class=s-item__price]')
-        price = pricetmp.text.split(' to ')[0]
+        price = pricetmp.text
+        if 'to' in price: continue
         price = price.replace('$','')
     except:
         price = 'NA'
@@ -54,7 +55,14 @@ for item in data:
     except:
         img = 'NA'
     
-    print(title + '\t' + price + '\t' + sale +'\t' + url + '\t' + img)
-    fw.write(title + '\t' + price + '\t' + sale +'\t' + url + '\t' + img + '\n')
+    try:
+        if sale=='NA':
+            print(title + '\t' + price + '\t' + sale +'\t' + url + '\t' + img)
+            fw.write(title + '\t' + price + '\t' + sale +'\t' + url + '\t' + img + '\n')
+        else:
+            print(title + '\t' + sale + '\t' + price +'\t' + url + '\t' + img)
+            fw.write(title + '\t' + sale + '\t' + price +'\t' + url + '\t' + img + '\n')
+    except:
+        print('something worng')
 fw.close()
-#driver.quit()
+driver.quit()

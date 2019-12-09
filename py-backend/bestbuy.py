@@ -107,12 +107,13 @@ for p in range(1,pageNum+1): # for each page
                 tmp+=char
             month=tmp
             #print(month)
-            if price != 'NA': 
-                price2=float(price)*int(month)
-                price=price2
-            if sale != 'NA': 
-                sale2=float(sale)*int(month)
-                sale=sale2
+            if len(month)!=0: 
+                if price != 'NA': 
+                    price2=float(price)*int(month)
+                    price=price2
+                if sale != 'NA': 
+                    sale2=float(sale)*int(month)
+                    sale=sale2
         
         #print(name + '\t' + sale+ '\t' + price + '\t' + str(url) + '\t' + image + '\n')
         if sale == 'NA':
