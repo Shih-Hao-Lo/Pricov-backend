@@ -61,6 +61,7 @@ const resolvers = {
             return out;
         },
         webmine: async (parents, args, context, info) => {
+            console.log('args,',args)
             var user = await context.dbf.getuser(args.email)
             var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
             for (var web = 0; web < args.website.length; web++) {
