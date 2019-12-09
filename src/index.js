@@ -61,21 +61,24 @@ const resolvers = {
             return out;
         },
         webmine: async (parents, args, context, info) => {
+            var user = await context.dbf.getuser(args.email)
+            var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
             for (var web = 0; web < args.website.length; web++) {
                 if (args.website[web].toLowerCase() == 'amazon') {
                     var response = await axios.get('http://localhost:3001/amazon?keyword=' + args.keyword)
                     var arr = response.data.split('\n')
                     console.log('in wibmine amazon');
                     // console.log(arr);
-                    var user = await context.dbf.getuser(args.email)
-                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
                     var x = 0;
                     var end = 0;
                     while (end < 20 && x < arr.length) {
                         var obj = arr[x].split('\t')
+                        var kw = args.keyword.split('+')
                         x++;
                         if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
                         if (obj[1] == 'NA.NA') continue;
+                        console.log(obj[0],kw[0])
+                        if(!context.dbf.contains(obj[0],kw[0])) continue
                         price = ''
                         sale = ''
                         if (obj[2] != 'NA') {
@@ -91,25 +94,38 @@ const resolvers = {
                     }
                     await context.dbf.addstatistic('amazon', args.keyword);
                 }
-                else if (args.website[web].toLowerCase() == 'target') {
+                else if (args.website[web].toLowerCase() == 'ebay') {
                     // Impelment py here
-                    await context.dbf.addstatistic('target', args.keyword);
-                    console.log('Target!');
-                }
-                else if (args.website[web].toLowerCase() == 'bestbuy') {
-                    // Impelment py here
-                    var response = await axios.get('http://localhost:3001/bestbuy?keyword=' + args.keyword)
+                    var response = await axios.get('http://localhost:3001/ebay?keyword=' + args.keyword)
                     var arr = response.data.split('\n')
-                    console.log('in wibmine bestbuy');
-                    console.log(arr)
-                    var user = await context.dbf.getuser(args.email)
-                    var todel = await context.dbf.delHistory(user._id.toString(), args.keyword)
+                    console.log('in wibmine ebay');
+                    // console.log(arr)
                     var x = 0;
                     var end = 0;
                     while (end < 20 && x < arr.length) {
                         var obj = arr[x].split('\t')
                         x++;
                         if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
+                        if(!context.dbf.contains(obj[0],kw[0])) continue
+                        var addrd = await context.dbf.addHistory(obj[0], obj[1], obj[2], obj[3], obj[4], user._id.toString(), args.keyword);
+                        end++;
+                    }
+                    await context.dbf.addstatistic('ebay', args.keyword);
+                    console.log('Ebay!');
+                }
+                else if (args.website[web].toLowerCase() == 'bestbuy') {
+                    // Impelment py here
+                    var response = await axios.get('http://localhost:3001/bestbuy?keyword=' + args.keyword)
+                    var arr = response.data.split('\n')
+                    console.log('in wibmine bestbuy');
+                    // console.log(arr)
+                    var x = 0;
+                    var end = 0;
+                    while (end < 20 && x < arr.length) {
+                        var obj = arr[x].split('\t')
+                        x++;
+                        if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
+                        if(!context.dbf.contains(obj[0],kw[0])) continue
                         var addrd = await context.dbf.addHistory(obj[0], obj[1], obj[2], obj[3], obj[4], user._id.toString(), args.keyword);
                         end++;
                     }

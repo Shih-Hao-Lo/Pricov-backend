@@ -225,6 +225,24 @@ async function addstatistic(website, department){
     }
 }
 
+// Other
+
+function contains(title , keyword) {
+    title = title.toLowerCase()
+    keyword = keyword.toLowerCase()
+    if(title.length < keyword.length) return false;
+    for(var x = 0 ; x < title.length - keyword.length ; x++) {
+        if(title.charAt(x) == keyword.charAt(0)){
+            var y = 0;
+            for(y = 0 ; y < keyword.length ; y++) {
+                if(title.charAt(x+y) != keyword.charAt(y)) break;
+            }
+            if(y == keyword.length) return true;
+        }
+    }
+    return false;
+}
+
 module.exports = {
     getuser,
     getuserbyid,
@@ -237,5 +255,6 @@ module.exports = {
     addHistory,
     delHistory,
     getstatistic,
-    addstatistic
+    addstatistic,
+    contains
 };
