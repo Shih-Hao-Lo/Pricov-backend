@@ -9,8 +9,8 @@
 ## Group Member
 - Wei-Hsuan Wong
 - Shih-Hao Lo
-- 
-- 
+- Yangyang Liu
+- Haolin Yang
 
 ## Setup
 
