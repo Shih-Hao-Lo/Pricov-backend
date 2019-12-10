@@ -6,9 +6,15 @@
 > Backend server of Procov  
 > Frontend at: https://github.com/Wesley16838/PriCov.git
 
+## Group Member
+- Wei-Hsuan Wong
+- Shih-Hao Lo
+- 
+- 
+
 ## Setup
 
-1. Open one terminal at `\Pricov-backend` folder.
+1. Open one terminal at `\Pricov-backend`.
 2. Run the following npm commend:
 ```
 npm i
