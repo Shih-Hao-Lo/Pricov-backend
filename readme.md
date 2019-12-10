@@ -9,8 +9,8 @@
 ## Group Member
 - Wei-Hsuan Wong
 - Shih-Hao Lo
-- 
-- 
+- Someone
+- Someome else
 
 ## Setup
 
