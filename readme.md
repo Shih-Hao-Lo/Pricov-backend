@@ -14,7 +14,7 @@
 
 ## Setup
 
-1. Open one terminal at `\Pricov-backend`.
+1. Open a terminal at `\Pricov-backend`.
 2. Run the following npm commend:
 ```
 npm i
