@@ -23,7 +23,7 @@ npm start
 3. Install Python3 for Mac or Windows at <a href="https://www.anaconda.com/distribution/#download-section" target="_blank">here</a>.
 4. Go to Anaconda Navigator.
 5. Click on Environments.
-6. Enter `selenium` at Search Packages.
+6. Enter `selenium` at **Search Packages**.
 7. Install all packages show in the navigator.
 8. Get Chrome Driver for Mac or Windows at <a href="https://chromedriver.chromium.org/downloads" target="_blank">here</a>.
 9.  Put the Chrome Driver to `\Pricov-backend\py-backend`.
