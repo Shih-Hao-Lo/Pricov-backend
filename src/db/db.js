@@ -111,7 +111,7 @@ async function deluser(id){
     if (deleteInfo.deletedCount === 0) throw 'Insert fail!';
 
     const historyCollection = await history();
-    const updatehistory = await historyCollection.update({ user: id.toString() } , { $set: { user: "NA" }});
+    const updatehistory = await historyCollection.deleteMany({ user: id });
 
     return todel;
 }
