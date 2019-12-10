@@ -3,7 +3,7 @@
 # Pricov-backend
 > Stevens Institute of Technology  
 > 2019 Fall CS554 final project  
-> Backend server of Procov  
+> Backend server of Pricov  
 > Frontend at: https://github.com/Wesley16838/PriCov.git
 
 ## Group Member
