@@ -200,7 +200,6 @@ async function addstatistic(website, department){
             department: obj
         }
         let inserted = await statisticsCollection.insertOne(newwebsite);
-        return await get();
     }
     else{
         let updateduser = null;
