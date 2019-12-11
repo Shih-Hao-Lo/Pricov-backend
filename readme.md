@@ -12,7 +12,12 @@
 - Yangyang Liu
 - Haolin Yang
 
-## Setup GraphQL Backend
+## Environment Require
+1. Python 3
+2. MongoDB
+3. Node.js
+
+## Setup GraphQL Server
 
 1. Open a terminal at `\Pricov-backend`.
 2. Run the following npm commend:
@@ -21,18 +26,22 @@ npm i
 npm start
 ```
 
-## Setup Python Backend
+## Setup Python Server
 
-1. Install Python3 for Mac or Windows at <a href="https://www.anaconda.com/distribution/#download-section" target="_blank">here</a>.
-2. Go to Anaconda Navigator.
-3. Click on Environments.
-4. Enter `selenium` at **Search Packages**.
-5. Install all packages show in the navigator.
-6. Get Chrome Driver for Mac or Windows at <a href="https://chromedriver.chromium.org/downloads" target="_blank">here</a>.
-7.  Put the Chrome Driver to `\Pricov-backend\py-backend`.
+1. Install Python3 for Mac or Windows at [here](https://www.python.org/downloads/).
+
+2. Install `selenium` with commend *"pip install selenium"*.
+
+6. Get Chrome Driver for Mac or Windows at [here](https://chromedriver.chromium.org/downloads).
+
+7.  Put the Chrome Driver to `\Pricov-backend\py-backend` and override the Chrome Driver inside.
+
+> Default Chrome Driver in the folder is for Chrome version 77 and Windows x64.
+
 8. Open another terminal at `\Pricov-backend\py-backend`.
+
 9. Run the following npm commend:
 ```
 npm i
-npm start
-```
+np start
+``` 
