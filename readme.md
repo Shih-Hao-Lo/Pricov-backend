@@ -36,7 +36,7 @@ npm start
 
 7.  Put the Chrome Driver to `\Pricov-backend\py-backend` and override the Chrome Driver inside.
 
-> Default Chrome Driver in the folder is for Chrome version 77 and Windows x64.
+> Default Chrome Driver in the folder is for Chrome version 79 and Windows.
 
 8. Open another terminal at `\Pricov-backend\py-backend`.
 
