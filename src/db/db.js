@@ -91,27 +91,19 @@ async function updateuser(id , email){
     return await getuserbyid(id);
 }
 
-async function deluser(id){
+async function deluser(email){
     if(id === undefined){
         throw 'input is empty';
     }
-    if(id.constructor != ObjectID){
-        if(ObjectID.isValid(id)){
-            id = new ObjectID(id);
-        }
-        else{
-            throw 'Id is invalid!(in history.get)'
-        }
-    }
 
-    let todel = await getuserbyid(id);
+    let todel = await getuser(email);
 
     const userCollection = await users();
-    const deleteInfo = await userCollection.removeOne({ _id: id });
+    const deleteInfo = await userCollection.removeOne({ _id: todel._id });
     if (deleteInfo.deletedCount === 0) throw 'Insert fail!';
 
     const historyCollection = await history();
-    const updatehistory = await historyCollection.deleteMany({ user: id });
+    const updatehistory = await historyCollection.deleteMany({ user: todel._id.toString() });
 
     return todel;
 }
