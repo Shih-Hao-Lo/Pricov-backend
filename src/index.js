@@ -55,7 +55,7 @@ const resolvers = {
             return out;
         },
         deleteuser: async (parents, args, context, info) => {
-            let out = await context.dbf.deluser(args._id);
+            let out = await context.dbf.deluser(args.email);
             console.log('out in deluser');
             console.log(out);
             return out;
