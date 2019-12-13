@@ -92,10 +92,6 @@ async function updateuser(id , email){
 }
 
 async function deluser(email){
-    if(id === undefined){
-        throw 'input is empty';
-    }
-
     let todel = await getuser(email);
 
     const userCollection = await users();
