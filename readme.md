@@ -25,6 +25,7 @@
 npm i
 npm start
 ```
+3. Start MongoDB service on ypur computer.
 
 ## Setup Python Server
 
@@ -43,5 +44,9 @@ npm start
 9. Run the following npm commend:
 ```
 npm i
-np start
+npm start
 ``` 
+
+## Setup Instruction Video
+
+- For setup instruction video, please click [here](https://youtu.be/8mE1I3tATXo) 
