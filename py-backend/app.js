@@ -41,6 +41,7 @@ app.get('/bestbuy', async (req , res) => {
 
 app.get('/ebay', async (req , res) => {
     kw=req.query.keyword.split(' ')
+    console.log(req.query.keyword)
     var process = spawn('python', ["./ebay.py", kw[0] , kw[1]]);
     process.stdout.on('data', function (data) {
         console.log(data.toString())

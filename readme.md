@@ -44,7 +44,7 @@ npm start
 9. Run the following npm commend:
 ```
 npm i
-np start
+npm start
 ``` 
 
 ## Setup Instruction Video
