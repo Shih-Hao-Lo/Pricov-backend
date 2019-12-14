@@ -79,7 +79,7 @@ const resolvers = {
                         if(obj.length < 5) continue
                         if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
                         if (obj[1] == 'NA.NA') continue;
-                        if(!context.dbf.contains(obj[0],kw[0])) continue
+                        if(!context.dbf.contains(obj[0],kw[0],kw[1])) continue
                         price = ''
                         sale = ''
                         if (obj[2] != 'NA') {
@@ -109,7 +109,7 @@ const resolvers = {
                         x++;
                         if(obj.length < 5) continue
                         if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
-                        if(!context.dbf.contains(obj[0],kw[0])) continue
+                        if(!context.dbf.contains(obj[0],kw[0],kw[1])) continue
                         var addrd = await context.dbf.addHistory(obj[0], obj[1], obj[2], obj[3], obj[4], user._id.toString(), args.keyword);
                         end++;
                     }
@@ -131,7 +131,7 @@ const resolvers = {
                         x++;
                         if(obj.length < 5) continue
                         if (obj[0].length == 0 || obj[1].length == 0 || obj[2].length == 0 || obj[3].length == 0 || obj[4].length == 0) continue;
-                        if(!context.dbf.contains(obj[0],kw[0])) continue
+                        if(!context.dbf.contains(obj[0],kw[0],kw[1])) continue
                         var addrd = await context.dbf.addHistory(obj[0], obj[1], obj[2], obj[3], obj[4], user._id.toString(), args.keyword);
                         end++;
                     }

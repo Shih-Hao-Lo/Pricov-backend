@@ -214,9 +214,10 @@ async function addstatistic(website, department){
 
 // Other
 
-function contains(title , keyword) {
+function contains(title , keyword , keyword2) {
     title = title.toLowerCase()
     keyword = keyword.toLowerCase()
+    keyword2 = keyword2.toLowerCase()
     if(title.length < keyword.length) return false;
     for(var x = 0 ; x < title.length - keyword.length ; x++) {
         if(title.charAt(x) == keyword.charAt(0)){
@@ -225,6 +226,16 @@ function contains(title , keyword) {
                 if(title.charAt(x+y) != keyword.charAt(y)) break;
             }
             if(y == keyword.length) return true;
+        }
+    }
+    if(title.length < keyword2.length) return false;
+    for(var x = 0 ; x < title.length - keyword2.length ; x++) {
+        if(title.charAt(x) == keyword2.charAt(0)){
+            var y = 0;
+            for(y = 0 ; y < keyword2.length ; y++) {
+                if(title.charAt(x+y) != keyword2.charAt(y)) break;
+            }
+            if(y == keyword2.length) return true;
         }
     }
     return false;
